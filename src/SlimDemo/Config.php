@@ -5,6 +5,8 @@ namespace SlimDemo;
 
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\BeanFactoryRegistry;
 use Slim\CallableResolver;
 use Slim\Handlers\Error;
@@ -25,18 +27,13 @@ class Config
 {
     /**
      * @Bean
+     * @Parameters(
+     *     @Parameter({"name" = "slim"})
+     * )
      */
-    public function settings() : array
+    public function settings(array $slimConfig = []) : array
     {
-        return [
-            'httpVersion' => '1.1',
-            'responseChunkSize' => 4096,
-            'outputBuffering' => 'append',
-            'determineRouteBeforeAppMiddleware' => false,
-            'displayErrorDetails' => false,
-            'addContentLengthHeader' => true,
-            'routerCacheFile' => false,
-        ];
+        return $slimConfig;
     }
 
     /**
