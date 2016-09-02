@@ -1,5 +1,6 @@
 {
     "require": {
-        "slim/slim": "^3.5"
+        "slim/slim": "^3.5",
+        "bitexpert/disco": "^0.5.0"
     }
 }
