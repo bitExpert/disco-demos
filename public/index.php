@@ -9,9 +9,11 @@ if (php_sapi_name() === 'cli-server'
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
+require 'config/config.php';
 
+$config = new \bitExpert\Disco\BeanFactoryConfiguration($APP_CONF['di']['cache']);
 /** @var \Interop\Container\ContainerInterface $container */
-$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(\App\Config::class);
+$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory($APP_CONF['di']['config'], $APP_CONF, $config);
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
 
 /** @var \Zend\Expressive\Application $app */

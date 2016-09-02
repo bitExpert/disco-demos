@@ -8,6 +8,8 @@ use App\Action\HomePageFactory;
 use App\Action\PingAction;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\BeanFactoryRegistry;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -135,10 +137,13 @@ class Config
 
     /**
      * @Bean
+     * @Parameters({
+     *    @Parameter({"name" = "expressive"})
+     * })
      */
-    public function config() : array
+    public function config(array $expressiveConfig = []) : array
     {
-        return [
+        $defaultConfig = [
             'debug' => true,
 
             'config_cache_enabled' => false,
@@ -147,13 +152,6 @@ class Config
                 'error_handler' => [
                     'template_404'   => 'error::404',
                     'template_error' => 'error::error',
-                ],
-            ],
-            'whoops' => [
-                'json_exceptions' => [
-                    'display'    => true,
-                    'show_trace' => true,
-                    'ajax_only'  => true,
                 ],
             ],
             // This can be used to seed pre- and/or post-routing middleware
@@ -236,14 +234,13 @@ class Config
                 ],
             ],
             'twig' => [
-                'cache_dir'      => 'data/cache/twig',
-                'assets_url'     => '/',
-                'assets_version' => null,
                 'extensions'     => [
                     // extension service names or instances
                 ],
             ]
         ];
+
+        return array_merge($defaultConfig, $expressiveConfig);
     }
 
     /**
