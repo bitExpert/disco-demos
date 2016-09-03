@@ -1,0 +1,6 @@
+{
+    "require": {
+        "bitexpert/adroit": "^0.4.0",
+        "zendframework/zend-diactoros": "^1.3"
+    }
+}
