@@ -1,7 +1,8 @@
 {
     "require": {
         "php": ">=7.0",
-        "icehawk/icehawk": "^2.0"
+        "icehawk/icehawk": "^2.0",
+        "bitexpert/disco": "^0.6.0"
     },
     "autoload": {
         "psr-4": {
