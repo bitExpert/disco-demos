@@ -1,7 +1,7 @@
-# disco-demos
+# Expressive / Disco demo
 
-Check the commit history to see how Expressive and Disco were installed 
-and configured.
+Check the commit history to see how Expressive and Disco were installed and
+configured.
 
 ## License
 
