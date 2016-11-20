@@ -10,8 +10,12 @@ use App\Project\Application\EventSubscribers\IceHawkReadEventSubscriber;
 use App\Project\Application\EventSubscribers\IceHawkWriteEventSubscriber;
 use App\Project\Application\FinalResponders\FinalReadResponder;
 use App\Project\Application\FinalResponders\FinalWriteResponder;
-use IceHawk\IceHawk\Defaults\Traits\DefaultRequestInfoProviding;
-use IceHawk\IceHawk\Interfaces\ConfiguresIceHawk;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\BeanFactoryRegistry;
+use IceHawk\IceHawk\Defaults\RequestInfo;
+use IceHawk\IceHawk\IceHawk;
+use IceHawk\IceHawk\Interfaces\ProvidesRequestInfo;
 use IceHawk\IceHawk\Interfaces\RespondsFinallyToReadRequest;
 use IceHawk\IceHawk\Interfaces\RespondsFinallyToWriteRequest;
 use IceHawk\IceHawk\Routing\Patterns\Literal;
@@ -19,15 +23,22 @@ use IceHawk\IceHawk\Routing\ReadRoute;
 use IceHawk\IceHawk\Routing\WriteRoute;
 
 /**
- * Class IceHawkConfig
- *
- * @package App\Project
+ * @Configuration
  */
-final class IceHawkConfig implements ConfiguresIceHawk
+class Config
 {
-    use DefaultRequestInfoProviding;
+    /**
+     * @Bean
+     */
+    public function requestInfo() : ProvidesRequestInfo
+    {
+        return RequestInfo::fromEnv();
+    }
 
-    public function getReadRoutes()
+    /**
+     * @Bean
+     */
+    public function readRoutes() : array
     {
         # Define your read routes (GET / HEAD) here
         # For matching the URI you can use the Literal, RegExp or NamedRegExp pattern classes
@@ -37,7 +48,10 @@ final class IceHawkConfig implements ConfiguresIceHawk
         ];
     }
 
-    public function getWriteRoutes()
+    /**
+     * @Bean
+     */
+    public function writeRoutes() : array
     {
         # Define your write routes (POST / PUT / PATCH / DELETE) here
         # For matching the URI you can use the Literal, RegExp or NamedRegExp pattern classes
@@ -47,7 +61,10 @@ final class IceHawkConfig implements ConfiguresIceHawk
         ];
     }
 
-    public function getEventSubscribers() : array
+    /**
+     * @Bean
+     */
+    public function eventSubscribers() : array
     {
         # Register your subscribers for IceHawk events here
 
@@ -58,17 +75,34 @@ final class IceHawkConfig implements ConfiguresIceHawk
         ];
     }
 
-    public function getFinalReadResponder() : RespondsFinallyToReadRequest
+    /**
+     * @Bean
+     */
+    public function finalReadResponder() : RespondsFinallyToReadRequest
     {
         # Provide a final responder for read requests here
 
         return new FinalReadResponder();
     }
 
-    public function getFinalWriteResponder() : RespondsFinallyToWriteRequest
+    /**
+     * @Bean
+     */
+    public function finalWriteResponder() : RespondsFinallyToWriteRequest
     {
         # Provide a final responder for write requests here
 
         return new FinalWriteResponder();
+    }
+
+    /**
+     * @Bean
+     */
+    public function icehawk() : IceHawk
+    {
+        $beanFactory = BeanFactoryRegistry::getInstance();
+        $config = new IceHawkDiscoConfigDelegate($beanFactory);
+        $delegate = new IceHawkDelegate();
+        return new IceHawk($config, $delegate);
     }
 }
